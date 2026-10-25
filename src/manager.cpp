@@ -2087,7 +2087,7 @@ void Bot::NewRound () {
   StartTask (TaskId::Normal, TaskPri::kNormal, kInvalidNodeIndex, 0.0f, true);
 
   // restore fake client bit, just in case
-  pev->flags |= FL_CLIENT | FL_FAKECLIENT;
+  //pev->flags |= FL_CLIENT | FL_FAKECLIENT;
 
   if (rg.chance (50)) {
     PushRadioChat (RadioChat::NewRound);
