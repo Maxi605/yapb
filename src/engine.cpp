@@ -1611,7 +1611,7 @@ edict_t *Game::CreateFakeClient (ystl::StringRef name) {
 
   // restore containing entity, name and client flags
   ent->v.pContainingEntity = ent;
-  ent->v.flags = FL_FAKECLIENT | FL_CLIENT;
+  ent->v.flags = FL_CLIENT;
   ent->v.netname = netname;
 
   if (ent->pvPrivateData != nullptr) {
