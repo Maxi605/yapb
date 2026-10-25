@@ -1,0 +1,63 @@
+name: Build upstream YaPB
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 5 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build ${{ matrix.target }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: linux-x86
+            build_arg: linux-x86
+            artifact: yapb-linux-x86
+            output: build/ci-linux-x86/yapb.so
+          - target: windows-x86
+            build_arg: windows-x86-clang
+            artifact: yapb-windows-x86
+            output: build/ci-windows-x86-clang/yapb.dll
+
+    steps:
+      - name: Check out upstream YaPB with submodules
+        uses: actions/checkout@v4
+        with:
+          repository: yapb/yapb
+          ref: master
+          submodules: recursive
+          path: yapb
+
+      - name: Set up Zig
+        uses: mlugg/setup-zig@v2
+        with:
+          version: 0.13.0
+
+      - name: Set up CMake and Ninja
+        uses: lukka/get-cmake@latest
+
+      - name: Build YaPB
+        working-directory: yapb
+        shell: bash
+        run: ./build.sh --arch=${{ matrix.build_arg }}
+
+      - name: Verify build output
+        working-directory: yapb
+        shell: bash
+        run: |
+          test -f "${{ matrix.output }}"
+          file "${{ matrix.output }}"
+
+      - name: Upload compiled module
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: yapb/${{ matrix.output }}
+          if-no-files-found: error
+          retention-days: 14
