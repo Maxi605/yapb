@@ -1372,7 +1372,7 @@ void Bot::Update () {
   if (last_damage_timestamp_ < game.Time () && !ystl::fzero (last_damage_timestamp_)) {
     last_damage_timestamp_ = 0.0f;
   }
-  pev->flags |= FL_CLIENT | FL_FAKECLIENT; // restore fake client bit, just in case
+  pev->flags |= FL_CLIENT; // restore fake client bit, just in case
 
   // is bot movement enabled
   bot_movement_ = false;
