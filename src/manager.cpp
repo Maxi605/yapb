@@ -1433,7 +1433,8 @@ Bot::Bot (edict_t *bot, Difficulty difficulty, Personality personality, Team tea
   }
 
   MDLL_ClientPutInServer (bot);
-  bot->v.flags |= FL_CLIENT | FL_FAKECLIENT; // set this player as fake client
+  bot->v.flags |= FL_CLIENT;          // Set FL_CLIENT
+  bot->v.flags &= ~FL_FAKECLIENT;    // Clear FL_FAKECLIENT
 
   // initialize all the variables for this bot
   not_started_ = true; // hasn't joined game yet
